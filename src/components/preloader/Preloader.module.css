@@ -1,0 +1,74 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--teal, #6b9599);
+  z-index: var(--z-preloader, 900);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: circle(150% at 50% 50%);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 600px;
+  padding: 0 2rem;
+}
+
+.counterWrap {
+  overflow: hidden;
+}
+
+.counter {
+  font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+  font-size: clamp(5rem, 20vw, 14rem);
+  font-weight: 800;
+  color: var(--deep, #10282c);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+
+.snapit {
+  font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 800;
+  color: var(--yellow, #f2d34f);
+  letter-spacing: 0.08em;
+}
+
+.studioz {
+  font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 0.08em;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 2px;
+  background: rgba(16, 40, 44, 0.3);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.progressLine {
+  height: 100%;
+  background: var(--yellow, #f2d34f);
+  transform-origin: left;
+  border-radius: 2px;
+  width: 100%;
+}
+

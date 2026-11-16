@@ -1,0 +1,61 @@
+.dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: var(--z-cursor, 500);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  will-change: transform;
+}
+
+.ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: calc(var(--z-cursor, 500) - 1);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s;
+}
+
+.ring.link {
+  border-color: var(--yellow, #f2d34f);
+  background: rgba(242, 211, 79, 0.08);
+}
+
+.ring.video {
+  border-color: var(--yellow, #f2d34f);
+  background: rgba(16, 40, 44, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.ring.drag {
+  border-color: var(--teal, #6b9599);
+}
+
+.ring.text {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.playIcon,
+.dragIcon {
+  font-size: 14px;
+  color: var(--yellow, #f2d34f);
+  line-height: 1;
+}
+
