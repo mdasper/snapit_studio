@@ -34,7 +34,7 @@ export default function ShowreelExpand() {
 
       tl.to(videoFrameRef.current, {
         width: '100vw',
-        height: '100vh',
+        height: '100dvh',
         borderRadius: 0,
         ease: 'none',
       }, 0)
@@ -69,12 +69,15 @@ export default function ShowreelExpand() {
       <div
         ref={pinWrapRef}
         style={{
-          height: '100vh',
+          minHeight: '100svh',
+          height: '100dvh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
           position: 'relative',
+          padding: '1rem',
+          boxSizing: 'border-box',
         }}
       >
         {/* Labels */}
@@ -83,9 +86,8 @@ export default function ShowreelExpand() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-end',
-            width: '40vw',
+            width: 'min(90vw, 680px)',
             marginBottom: '1rem',
-            minWidth: '300px',
           }}
         >
           <span
@@ -122,10 +124,9 @@ export default function ShowreelExpand() {
           onMouseEnter={() => setCursorState('video')}
           onMouseLeave={() => setCursorState('default')}
           style={{
-            width: '40vw',
-            minWidth: '300px',
-            height: '50vh',
-            borderRadius: '2rem',
+            width: 'min(90vw, 680px)',
+            height: 'clamp(240px, 46vh, 480px)',
+            borderRadius: 'clamp(1.2rem, 3vw, 2rem)',
             overflow: 'hidden',
             backgroundImage: 'url(/media/reel_poster.jpg)',
             backgroundSize: 'cover',

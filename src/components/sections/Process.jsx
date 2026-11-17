@@ -119,36 +119,39 @@ export default function Process() {
       <div
         ref={stickyRef}
         style={{
-          height: '100vh',
+          minHeight: '100svh',
+          height: '100dvh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
-          padding: '2rem',
+          padding: 'clamp(1rem, 3vw, 2rem)',
           overflow: 'hidden',
+          boxSizing: 'border-box',
         }}
       >
         {/* Section title header */}
         <div
           style={{
             position: 'absolute',
-            top: '3rem',
-            left: 'clamp(1.5rem, 6vw, 6rem)',
+            top: 'clamp(1rem, 3vh, 3rem)',
+            left: 'clamp(1rem, 5vw, 6rem)',
             display: 'flex',
             alignItems: 'center',
-            gap: '0.6rem',
+            gap: '0.5rem',
+            zIndex: 10,
           }}
         >
           <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'var(--yellow)', display: 'inline-block' }} />
           <span
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '0.75rem',
-              letterSpacing: '0.25em',
+              fontSize: 'clamp(0.68rem, 1.4vw, 0.75rem)',
+              letterSpacing: '0.22em',
               textTransform: 'uppercase',
               color: 'var(--teal)',
-              fontWeight: 600,
+              fontWeight: 700,
             }}
           >
             The Execution Workflow // 4 Phases
@@ -160,7 +163,7 @@ export default function Process() {
           style={{
             position: 'relative',
             width: 'min(94vw, 1280px)',
-            height: 'clamp(380px, 55vh, 480px)',
+            height: 'clamp(330px, 52vh, 460px)',
           }}
         >
           {STEPS.map((step, i) => (
@@ -170,11 +173,11 @@ export default function Process() {
               style={{
                 position: 'absolute',
                 inset: 0,
-                borderRadius: '1.75rem',
+                borderRadius: 'clamp(1.2rem, 2.5vw, 1.75rem)',
                 backgroundImage: `url(${step.bgImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                padding: 'clamp(1.5rem, 4vw, 3.5rem)',
+                padding: 'clamp(1.2rem, 3.5vw, 3rem)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-end',
@@ -213,12 +216,12 @@ export default function Process() {
               <div
                 style={{
                   position: 'absolute',
-                  top: 'clamp(1rem, 3vw, 2rem)',
-                  right: 'clamp(1rem, 3vw, 2rem)',
+                  top: 'clamp(0.85rem, 2.5vw, 1.75rem)',
+                  right: 'clamp(0.85rem, 2.5vw, 1.75rem)',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.6rem',
-                  padding: '0.4rem 0.85rem',
+                  gap: '0.45rem',
+                  padding: '0.3rem 0.75rem',
                   borderRadius: '100px',
                   background: 'rgba(16, 40, 44, 0.85)',
                   backdropFilter: 'blur(10px)',
@@ -226,12 +229,12 @@ export default function Process() {
                   zIndex: 3,
                 }}
               >
-                <span style={{ fontSize: '1.2rem' }}>{step.icon}</span>
+                <span style={{ fontSize: '1rem' }}>{step.icon}</span>
                 <span
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 800,
-                    fontSize: '0.8rem',
+                    fontSize: '0.72rem',
                     color: 'var(--yellow)',
                     letterSpacing: '0.1em',
                   }}
@@ -245,12 +248,12 @@ export default function Process() {
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '0.7rem',
+                    fontSize: '0.68rem',
                     color: 'var(--yellow)',
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
                     display: 'block',
-                    marginBottom: '0.4rem',
+                    marginBottom: '0.3rem',
                     fontWeight: 700,
                   }}
                 >
@@ -260,10 +263,10 @@ export default function Process() {
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 900,
-                    fontSize: 'clamp(2.5rem, 5.5vw, 4.5rem)',
+                    fontSize: 'clamp(1.8rem, 4.5vw, 4rem)',
                     color: 'var(--cloud)',
-                    margin: '0 0 1rem',
-                    lineHeight: 1,
+                    margin: '0 0 0.6rem',
+                    lineHeight: 1.05,
                     letterSpacing: '-0.02em',
                   }}
                 >
@@ -272,10 +275,10 @@ export default function Process() {
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: 'clamp(0.95rem, 1.4vw, 1.1rem)',
-                    color: 'rgba(238, 240, 238, 0.85)',
+                    fontSize: 'clamp(0.85rem, 1.2vw, 1.05rem)',
+                    color: 'rgba(238, 240, 238, 0.9)',
                     margin: 0,
-                    lineHeight: 1.65,
+                    lineHeight: 1.5,
                   }}
                 >
                   {step.desc}
@@ -289,11 +292,11 @@ export default function Process() {
         <div
           style={{
             position: 'absolute',
-            bottom: '2.5rem',
+            bottom: 'clamp(1rem, 2.5vh, 2.2rem)',
             left: '50%',
             transform: 'translateX(-50%)',
             display: 'flex',
-            gap: '0.6rem',
+            gap: '0.45rem',
             zIndex: 10,
           }}
           aria-label="Process steps progress"

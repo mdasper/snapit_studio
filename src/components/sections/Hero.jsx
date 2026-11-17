@@ -109,12 +109,16 @@ export default function Hero() {
       style={{
         position: 'relative',
         width: '100%',
-        height: '100vh',
+        minHeight: '100svh',
+        height: '100dvh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
         background: 'var(--deep)',
+        paddingTop: '4rem',
+        paddingBottom: '2rem',
+        boxSizing: 'border-box',
       }}
     >
       {/* Background video / gradient */}
@@ -156,16 +160,14 @@ export default function Hero() {
         }}
       />
 
-
-
-      {/* Rotating ring */}
+      {/* Rotating ring - responsive size so it never overflows mobile screens */}
       <div
         ref={ringRef}
         style={{
           position: 'absolute',
-          width: '400px',
-          height: '400px',
-          border: '1.5px solid rgba(242,211,79,0.3)',
+          width: 'min(380px, 85vw)',
+          height: 'min(380px, 85vw)',
+          border: '1.5px solid rgba(242,211,79,0.25)',
           borderRadius: '50%',
           top: '50%',
           left: '50%',
@@ -175,15 +177,15 @@ export default function Hero() {
         }}
       />
 
-      {/* Floating icons */}
+      {/* Floating icons - tucked away nicely on mobile */}
       <span
         ref={icon1Ref}
         style={{
           position: 'absolute',
-          top: '20%',
-          left: '12%',
-          fontSize: 'clamp(2rem, 4vw, 3.5rem)',
-          opacity: 0.4,
+          top: '15%',
+          left: 'clamp(4%, 8vw, 12%)',
+          fontSize: 'clamp(1.5rem, 3.5vw, 3.5rem)',
+          opacity: 0.35,
           zIndex: 3,
           pointerEvents: 'none',
           userSelect: 'none',
@@ -196,10 +198,10 @@ export default function Hero() {
         ref={icon2Ref}
         style={{
           position: 'absolute',
-          bottom: '25%',
-          right: '10%',
-          fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
-          opacity: 0.35,
+          bottom: '15%',
+          right: 'clamp(4%, 6vw, 10%)',
+          fontSize: 'clamp(1.2rem, 2.5vw, 2.5rem)',
+          opacity: 0.3,
           zIndex: 3,
           pointerEvents: 'none',
           userSelect: 'none',
@@ -306,16 +308,17 @@ export default function Hero() {
 
       {/* Scroll indicator */}
       <div
+        className="scroll-hint"
         style={{
           position: 'absolute',
-          bottom: '2rem',
+          bottom: '1.5rem',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 4,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '0.5rem',
+          gap: '0.4rem',
         }}
         aria-hidden="true"
       >
@@ -338,7 +341,10 @@ export default function Hero() {
           50% { opacity: 0.3; transform: scaleY(0.7); }
         }
         @media (max-width: 768px) {
-          #hero .hero-line { font-size: clamp(2.5rem, 10vw, 4rem) !important; }
+          #hero .hero-line { font-size: clamp(2rem, 9vw, 3.2rem) !important; }
+        }
+        @media (max-height: 720px) {
+          #hero .scroll-hint { display: none !important; }
         }
       `}</style>
     </section>

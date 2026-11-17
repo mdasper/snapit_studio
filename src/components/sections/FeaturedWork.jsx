@@ -323,9 +323,9 @@ export default function FeaturedWork() {
           </div>
         </div>
       ) : (
-        /* Mobile carousel */
+        /* Mobile interactive luxury carousel */
         <div
-          style={{ padding: '1.5rem', overflow: 'hidden' }}
+          style={{ padding: '1.25rem 1rem 3rem', overflow: 'hidden' }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -334,53 +334,195 @@ export default function FeaturedWork() {
               display: 'flex',
               gap: '1rem',
               transform: `translateX(calc(-${activeIndex * 100}% - ${activeIndex}rem))`,
-              transition: 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              transition: 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             {projects.map((project, i) => (
               <div
                 key={project.id}
+                onClick={() => navigate(`/work/${project.id}`)}
                 style={{
                   flexShrink: 0,
                   width: '100%',
-                  height: '480px',
-                  borderRadius: '1.2rem',
-                  background: project.gradient,
+                  height: 'clamp(420px, 65vh, 520px)',
+                  borderRadius: '1.5rem',
                   position: 'relative',
                   overflow: 'hidden',
+                  cursor: 'pointer',
+                  boxShadow: '0 16px 40px rgba(0,0,0,0.6)',
+                  backgroundColor: 'var(--mid)',
                 }}
               >
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(16,40,44,0.95), transparent 60%)' }} />
-                <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem' }}>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', color: 'var(--yellow)', letterSpacing: '0.3em', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>
-                    {project.category}
+                {/* Real High-Resolution Thumbnail Image */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: `url(${project.thumbnail})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                />
+
+                {/* Cinematic Gradient Vignette */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background:
+                      'linear-gradient(to top, rgba(16,40,44,0.98) 0%, rgba(16,40,44,0.4) 50%, rgba(16,40,44,0.7) 100%)',
+                  }}
+                />
+
+                {/* Index badge top right */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '1.25rem',
+                    right: '1.25rem',
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: '0.8rem',
+                    color: 'var(--yellow)',
+                    padding: '0.3rem 0.75rem',
+                    borderRadius: '100px',
+                    background: 'rgba(16, 40, 44, 0.85)',
+                    backdropFilter: 'blur(8px)',
+                    border: '1px solid rgba(242, 211, 79, 0.3)',
+                  }}
+                >
+                  {String(i + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+                </div>
+
+                {/* Bottom Card Content */}
+                <div style={{ position: 'absolute', bottom: '1.75rem', left: '1.5rem', right: '1.5rem' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.72rem',
+                      color: 'var(--yellow)',
+                      letterSpacing: '0.22em',
+                      textTransform: 'uppercase',
+                      display: 'block',
+                      marginBottom: '0.35rem',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {project.category} &bull; {project.year}
                   </span>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.4rem', color: 'var(--cloud)', margin: 0 }}>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 800,
+                      fontSize: '1.6rem',
+                      color: 'var(--cloud)',
+                      margin: '0 0 0.3rem',
+                      lineHeight: 1.15,
+                    }}
+                  >
                     {project.title}
                   </h3>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.85rem',
+                      color: 'var(--teal)',
+                      margin: '0 0 0.8rem',
+                    }}
+                  >
+                    Client: {project.client}
+                  </p>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      color: 'var(--yellow)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                    }}
+                  >
+                    View Project &rarr;
+                  </span>
                 </div>
               </div>
             ))}
           </div>
-          {/* Dots */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
-            {projects.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveIndex(i)}
-                aria-label={`Go to project ${i + 1}`}
-                style={{
-                  width: i === activeIndex ? '24px' : '8px',
-                  height: '8px',
-                  borderRadius: '4px',
-                  background: i === activeIndex ? 'var(--yellow)' : 'rgba(238,240,238,0.3)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  transition: 'width 0.3s ease, background 0.3s ease',
-                }}
-              />
-            ))}
+
+          {/* Navigation Controls on Mobile: Dots + Next/Prev Buttons */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: '1.25rem',
+              padding: '0 0.5rem',
+            }}
+          >
+            <button
+              onClick={() => setActiveIndex((prev) => Math.max(0, prev - 1))}
+              disabled={activeIndex === 0}
+              aria-label="Previous Project"
+              style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                border: '1.5px solid rgba(107, 149, 153, 0.3)',
+                background: 'rgba(27, 67, 72, 0.4)',
+                color: 'var(--cloud)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: activeIndex === 0 ? 'not-allowed' : 'pointer',
+                opacity: activeIndex === 0 ? 0.3 : 1,
+              }}
+            >
+              &larr;
+            </button>
+
+            {/* Pagination Dots */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              {projects.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveIndex(i)}
+                  aria-label={`Go to project ${i + 1}`}
+                  style={{
+                    width: i === activeIndex ? '22px' : '7px',
+                    height: '7px',
+                    borderRadius: '4px',
+                    background: i === activeIndex ? 'var(--yellow)' : 'rgba(238,240,238,0.25)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    transition: 'all 0.3s ease',
+                  }}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={() => setActiveIndex((prev) => Math.min(projects.length - 1, prev + 1))}
+              disabled={activeIndex === projects.length - 1}
+              aria-label="Next Project"
+              style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                border: '1.5px solid rgba(107, 149, 153, 0.3)',
+                background: 'rgba(27, 67, 72, 0.4)',
+                color: 'var(--cloud)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: activeIndex === projects.length - 1 ? 'not-allowed' : 'pointer',
+                opacity: activeIndex === projects.length - 1 ? 0.3 : 1,
+              }}
+            >
+              &rarr;
+            </button>
           </div>
         </div>
       )}

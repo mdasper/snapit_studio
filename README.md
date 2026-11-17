@@ -1,6 +1,6 @@
 # SNAPIT STUDIOZ — Motion-Driven Portfolio Website
 
-An award-winning (Awwwards / FWA standard) portfolio website for **SNAPIT STUDIOZ**, a premier video, photo, and audio production company based in Chennai.
+An award-winning standard portfolio website for **SNAPIT STUDIOZ**, a premier video production company specializing in Ads Shoot, Reels Production, Short Films Making, and Video Editing based in Natham, Tamil Nadu.
 
 ---
 
@@ -115,3 +115,4 @@ Edit `src/data/siteConfig.js`:
 - **Target 60 FPS**: GSAP tickers synchronized with Lenis, strictly animating `transform`, `opacity`, and `clip-path`.
 - **`prefers-reduced-motion`**: Automatically falls back to clean, static presentation for sensitive users.
 - **Accessibility**: Skip links, ARIA labels, semantic landmark elements, and high-contrast yellow focus rings.
+>>>>>>> fb55d54 (feat: complete Snapit Studioz cinematic website with custom clapperboard preloader)

@@ -155,12 +155,13 @@ export default function CtaFooter({
             style={{
               fontFamily: 'var(--font-display)',
               fontWeight: 900,
-              fontSize: 'clamp(3.2rem, 8.5vw, 8rem)',
+              fontSize: 'clamp(2.1rem, 7.5vw, 6.5rem)',
               color: 'var(--cloud)',
               letterSpacing: '-0.03em',
               lineHeight: 1.05,
-              margin: '0 0 1.5rem',
+              margin: '0 0 1.25rem',
               width: '100%',
+              wordBreak: 'break-word',
             }}
           >
             {titlePrefix}{' '}
@@ -179,12 +180,12 @@ export default function CtaFooter({
           <p
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(1rem, 1.8vw, 1.35rem)',
-              color: 'var(--teal)',
-              maxWidth: '1000px',
-              margin: '0 auto 3rem',
-              lineHeight: 1.7,
-              opacity: 0.9,
+              fontSize: 'clamp(0.88rem, 1.3vw, 1.15rem)',
+              color: 'rgba(238, 240, 238, 0.8)',
+              maxWidth: '680px',
+              lineHeight: 1.6,
+              margin: '0 auto 2.5rem',
+              padding: '0 0.5rem',
             }}
           >
             {subtext}

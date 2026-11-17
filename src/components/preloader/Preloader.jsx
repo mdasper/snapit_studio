@@ -228,24 +228,30 @@ export default function Preloader({ onComplete }) {
       <div
         style={{
           position: 'absolute',
-          top: '2.5rem',
+          top: 'clamp(1rem, 3.5vh, 2.5rem)',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.7rem',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          gap: '0.4rem 0.6rem',
+          padding: '0 1rem',
           fontFamily: "'DM Mono', monospace",
-          fontSize: '0.72rem',
+          fontSize: 'clamp(0.6rem, 1.8vw, 0.72rem)',
           fontWeight: 700,
           color: '#eef0ee',
-          letterSpacing: '0.18em',
+          letterSpacing: '0.15em',
           textTransform: 'uppercase',
           opacity: 0.9,
           textShadow: '0 2px 8px rgba(0,0,0,0.6)',
+          textAlign: 'center',
+          boxSizing: 'border-box',
+          width: '100%',
         }}
       >
         <span
           style={{
-            width: '8px',
-            height: '8px',
+            width: '7px',
+            height: '7px',
             borderRadius: '50%',
             backgroundColor: '#e63946',
             boxShadow: '0 0 10px #e63946',
@@ -253,11 +259,11 @@ export default function Preloader({ onComplete }) {
           }}
         />
         <span>SNAPIT STUDIOZ</span>
-        <span style={{ color: '#ffffff', opacity: 0.6 }}>&bull;</span>
+        <span style={{ color: '#ffffff', opacity: 0.5 }}>&bull;</span>
         <span>ADS SHOOT</span>
-        <span style={{ color: '#ffffff', opacity: 0.6 }}>&bull;</span>
+        <span style={{ color: '#ffffff', opacity: 0.5 }}>&bull;</span>
         <span>REELS</span>
-        <span style={{ color: '#ffffff', opacity: 0.6 }}>&bull;</span>
+        <span style={{ color: '#ffffff', opacity: 0.5 }}>&bull;</span>
         <span>SHORT FILMS</span>
       </div>
 
