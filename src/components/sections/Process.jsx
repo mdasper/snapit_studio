@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import SplitReveal from '../ui/SplitReveal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,12 +41,11 @@ export default function Process() {
   const stickyRef = useRef(null);
   const cardsRef = useRef([]);
   const [activeStep, setActiveStep] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
   const prefersReduced = useReducedMotion();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
-    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -120,8 +118,9 @@ export default function Process() {
       id="process"
       style={{
         background: 'var(--deep)',
-        height: (prefersReduced || isMobile) ? 'auto' : `${STEPS.length * 100}vh`,
+        height: isMobile ? 'auto' : `${STEPS.length * 100}vh`,
         position: 'relative',
+        padding: isMobile ? '3.5rem clamp(1.25rem, 5vw, 2.5rem) 4rem' : 0,
       }}
     >
       <div
@@ -134,9 +133,10 @@ export default function Process() {
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
-          padding: isMobile ? '4.5rem 1rem 3rem' : 'clamp(1rem, 3vw, 2rem)',
+          padding: isMobile ? 0 : 'clamp(1rem, 3vw, 2rem)',
           overflow: isMobile ? 'visible' : 'hidden',
           boxSizing: 'border-box',
+          width: '100%',
         }}
       >
         {/* Section title header */}
@@ -145,8 +145,9 @@ export default function Process() {
             position: isMobile ? 'relative' : 'absolute',
             top: isMobile ? 'auto' : 'clamp(1rem, 3vh, 3rem)',
             left: isMobile ? 'auto' : 'clamp(1rem, 5vw, 6rem)',
-            marginBottom: isMobile ? '2rem' : 0,
-            alignSelf: isMobile ? 'flex-start' : 'auto',
+            marginBottom: isMobile ? '1.75rem' : 0,
+            alignSelf: 'flex-start',
+            width: isMobile ? '100%' : 'auto',
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
@@ -157,7 +158,7 @@ export default function Process() {
           <span
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(0.68rem, 1.4vw, 0.75rem)',
+              fontSize: 'clamp(0.7rem, 1.4vw, 0.75rem)',
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
               color: 'var(--teal)',
@@ -172,7 +173,8 @@ export default function Process() {
         <div
           style={{
             position: 'relative',
-            width: 'min(94vw, 1280px)',
+            width: isMobile ? '100%' : 'min(94vw, 1280px)',
+            maxWidth: '1280px',
             height: isMobile ? 'auto' : 'clamp(330px, 52vh, 460px)',
             display: isMobile ? 'flex' : 'block',
             flexDirection: isMobile ? 'column' : 'initial',
@@ -186,19 +188,21 @@ export default function Process() {
               style={{
                 position: isMobile ? 'relative' : 'absolute',
                 inset: isMobile ? 'auto' : 0,
+                width: '100%',
                 minHeight: isMobile ? '340px' : 'auto',
                 borderRadius: 'clamp(1.2rem, 2.5vw, 1.75rem)',
                 backgroundImage: `url(${step.bgImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                padding: 'clamp(1.2rem, 3.5vw, 3rem)',
+                padding: isMobile ? '1.5rem 1.25rem' : 'clamp(1.2rem, 3.5vw, 3rem)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-end',
                 overflow: 'hidden',
-                willChange: 'transform',
+                willChange: isMobile ? 'auto' : 'transform',
                 boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(107, 149, 153, 0.2)',
                 backgroundColor: 'var(--mid)',
+                boxSizing: 'border-box',
               }}
             >
               {/* Deep Cinematic Contrast Gradient Overlay */}
@@ -212,38 +216,40 @@ export default function Process() {
                 }}
               />
 
-              {/* Stack Dimming Overlay */}
-              <div
-                data-overlay
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: '#000',
-                  borderRadius: 'inherit',
-                  opacity: 0,
-                  pointerEvents: 'none',
-                  zIndex: 2,
-                }}
-              />
+              {/* Stack Dimming Overlay (Desktop only) */}
+              {!isMobile && (
+                <div
+                  data-overlay
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: '#000',
+                    borderRadius: 'inherit',
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    zIndex: 2,
+                  }}
+                />
+              )}
 
               {/* Decorative Step Badge Top Right */}
               <div
                 style={{
                   position: 'absolute',
-                  top: 'clamp(0.85rem, 2.5vw, 1.75rem)',
-                  right: 'clamp(0.85rem, 2.5vw, 1.75rem)',
+                  top: isMobile ? '1rem' : 'clamp(0.85rem, 2.5vw, 1.75rem)',
+                  right: isMobile ? '1rem' : 'clamp(0.85rem, 2.5vw, 1.75rem)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.45rem',
-                  padding: '0.3rem 0.75rem',
+                  padding: '0.35rem 0.8rem',
                   borderRadius: '100px',
-                  background: 'rgba(16, 40, 44, 0.85)',
+                  background: 'rgba(16, 40, 44, 0.88)',
                   backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(242, 211, 79, 0.35)',
+                  border: '1px solid rgba(242, 211, 79, 0.4)',
                   zIndex: 3,
                 }}
               >
-                <span style={{ fontSize: '1rem' }}>{step.icon}</span>
+                <span style={{ fontSize: '0.95rem' }}>{step.icon}</span>
                 <span
                   style={{
                     fontFamily: 'var(--font-display)',
@@ -258,7 +264,7 @@ export default function Process() {
               </div>
 
               {/* Content text */}
-              <div style={{ position: 'relative', zIndex: 3, maxWidth: '600px' }}>
+              <div style={{ position: 'relative', zIndex: 3, maxWidth: '640px' }}>
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
@@ -267,7 +273,7 @@ export default function Process() {
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
                     display: 'block',
-                    marginBottom: '0.3rem',
+                    marginBottom: '0.35rem',
                     fontWeight: 700,
                   }}
                 >
@@ -277,9 +283,9 @@ export default function Process() {
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 900,
-                    fontSize: 'clamp(1.8rem, 4.5vw, 4rem)',
+                    fontSize: isMobile ? '1.85rem' : 'clamp(1.8rem, 4.5vw, 4rem)',
                     color: 'var(--cloud)',
-                    margin: '0 0 0.6rem',
+                    margin: '0 0 0.5rem',
                     lineHeight: 1.05,
                     letterSpacing: '-0.02em',
                   }}
@@ -289,10 +295,10 @@ export default function Process() {
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: 'clamp(0.85rem, 1.2vw, 1.05rem)',
-                    color: 'rgba(238, 240, 238, 0.9)',
+                    fontSize: isMobile ? '0.88rem' : 'clamp(0.85rem, 1.2vw, 1.05rem)',
+                    color: 'rgba(238, 240, 238, 0.92)',
                     margin: 0,
-                    lineHeight: 1.5,
+                    lineHeight: 1.55,
                   }}
                 >
                   {step.desc}
@@ -302,78 +308,80 @@ export default function Process() {
           ))}
         </div>
 
-        {/* Film-strip progress indicator */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 'clamp(1rem, 2.5vh, 2.2rem)',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            gap: '0.45rem',
-            zIndex: 10,
-          }}
-          aria-label="Process steps progress"
-        >
-          {STEPS.map((step, i) => (
-            <div
-              key={i}
-              style={{
-                width: '56px',
-                height: '32px',
-                borderRadius: '6px',
-                border: i === activeStep ? '1.5px solid var(--yellow)' : '1px solid rgba(107,149,153,0.3)',
-                background: i === activeStep ? 'var(--yellow)' : 'rgba(16, 40, 44, 0.7)',
-                backdropFilter: 'blur(8px)',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                position: 'relative',
-                boxShadow: i === activeStep ? '0 4px 15px rgba(242, 211, 79, 0.35)' : 'none',
-              }}
-              role="presentation"
-            >
-              {/* Film perforations */}
+        {/* Film-strip progress indicator (Desktop Only: prevents overlapping text on mobile) */}
+        {!isMobile && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 'clamp(1rem, 2.5vh, 2.2rem)',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex',
+              gap: '0.45rem',
+              zIndex: 10,
+            }}
+            aria-label="Process steps progress"
+          >
+            {STEPS.map((step, i) => (
               <div
+                key={i}
                 style={{
-                  position: 'absolute',
-                  left: '4px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: '4px',
-                  height: '10px',
-                  borderRadius: '1px',
-                  background: i === activeStep ? 'rgba(16,40,44,0.4)' : 'rgba(107,149,153,0.3)',
+                  width: '56px',
+                  height: '32px',
+                  borderRadius: '6px',
+                  border: i === activeStep ? '1.5px solid var(--yellow)' : '1px solid rgba(107,149,153,0.3)',
+                  background: i === activeStep ? 'var(--yellow)' : 'rgba(16, 40, 44, 0.7)',
+                  backdropFilter: 'blur(8px)',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  position: 'relative',
+                  boxShadow: i === activeStep ? '0 4px 15px rgba(242, 211, 79, 0.35)' : 'none',
                 }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  right: '4px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: '4px',
-                  height: '10px',
-                  borderRadius: '1px',
-                  background: i === activeStep ? 'rgba(16,40,44,0.4)' : 'rgba(107,149,153,0.3)',
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 800,
-                  fontSize: '0.75rem',
-                  color: i === activeStep ? 'var(--deep)' : 'var(--cloud)',
-                  letterSpacing: '0.05em',
-                }}
+                role="presentation"
               >
-                {step.num}
-              </span>
-            </div>
-          ))}
-        </div>
+                {/* Film perforations */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '4px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '4px',
+                    height: '10px',
+                    borderRadius: '1px',
+                    background: i === activeStep ? 'rgba(16,40,44,0.4)' : 'rgba(107,149,153,0.3)',
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    right: '4px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '4px',
+                    height: '10px',
+                    borderRadius: '1px',
+                    background: i === activeStep ? 'rgba(16,40,44,0.4)' : 'rgba(107,149,153,0.3)',
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: '0.75rem',
+                    color: i === activeStep ? 'var(--deep)' : 'var(--cloud)',
+                    letterSpacing: '0.05em',
+                  }}
+                >
+                  {step.num}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
