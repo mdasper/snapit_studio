@@ -81,14 +81,15 @@ export default function Statistics() {
   const prefersReduced = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReduced) {
+    const isMobile = window.innerWidth < 768;
+    if (prefersReduced || isMobile) {
       setTriggered(true);
       return;
     }
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: 'top 70%',
+        start: 'top 85%',
         onEnter: () => setTriggered(true),
         once: true,
       });

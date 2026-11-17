@@ -42,10 +42,18 @@ export default function Process() {
   const stickyRef = useRef(null);
   const cardsRef = useRef([]);
   const [activeStep, setActiveStep] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const prefersReduced = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReduced) return;
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReduced || isMobile) return;
 
     const ctx = gsap.context(() => {
       const cards = cardsRef.current.filter(Boolean);
@@ -104,7 +112,7 @@ export default function Process() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [prefersReduced]);
+  }, [prefersReduced, isMobile]);
 
   return (
     <section
@@ -112,31 +120,33 @@ export default function Process() {
       id="process"
       style={{
         background: 'var(--deep)',
-        height: prefersReduced ? 'auto' : `${STEPS.length * 100}vh`,
+        height: (prefersReduced || isMobile) ? 'auto' : `${STEPS.length * 100}vh`,
         position: 'relative',
       }}
     >
       <div
         ref={stickyRef}
         style={{
-          minHeight: '100svh',
-          height: '100dvh',
+          minHeight: isMobile ? 'auto' : '100svh',
+          height: isMobile ? 'auto' : '100dvh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
-          padding: 'clamp(1rem, 3vw, 2rem)',
-          overflow: 'hidden',
+          padding: isMobile ? '4.5rem 1rem 3rem' : 'clamp(1rem, 3vw, 2rem)',
+          overflow: isMobile ? 'visible' : 'hidden',
           boxSizing: 'border-box',
         }}
       >
         {/* Section title header */}
         <div
           style={{
-            position: 'absolute',
-            top: 'clamp(1rem, 3vh, 3rem)',
-            left: 'clamp(1rem, 5vw, 6rem)',
+            position: isMobile ? 'relative' : 'absolute',
+            top: isMobile ? 'auto' : 'clamp(1rem, 3vh, 3rem)',
+            left: isMobile ? 'auto' : 'clamp(1rem, 5vw, 6rem)',
+            marginBottom: isMobile ? '2rem' : 0,
+            alignSelf: isMobile ? 'flex-start' : 'auto',
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
@@ -163,7 +173,10 @@ export default function Process() {
           style={{
             position: 'relative',
             width: 'min(94vw, 1280px)',
-            height: 'clamp(330px, 52vh, 460px)',
+            height: isMobile ? 'auto' : 'clamp(330px, 52vh, 460px)',
+            display: isMobile ? 'flex' : 'block',
+            flexDirection: isMobile ? 'column' : 'initial',
+            gap: isMobile ? '1.5rem' : 0,
           }}
         >
           {STEPS.map((step, i) => (
@@ -171,8 +184,9 @@ export default function Process() {
               key={step.num}
               ref={(el) => (cardsRef.current[i] = el)}
               style={{
-                position: 'absolute',
-                inset: 0,
+                position: isMobile ? 'relative' : 'absolute',
+                inset: isMobile ? 'auto' : 0,
+                minHeight: isMobile ? '340px' : 'auto',
                 borderRadius: 'clamp(1.2rem, 2.5vw, 1.75rem)',
                 backgroundImage: `url(${step.bgImage})`,
                 backgroundSize: 'cover',

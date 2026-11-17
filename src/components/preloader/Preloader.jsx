@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getLenis } from '../../hooks/useLenis';
 import logoUrl from '../../assets/logo.png';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Preloader({ onComplete }) {
   const containerRef = useRef(null);
@@ -78,6 +81,9 @@ export default function Preloader({ onComplete }) {
         document.body.style.overflow = '';
         setMounted(false);
         window.dispatchEvent(new CustomEvent('preloader:done'));
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100);
         onComplete?.();
       },
     });

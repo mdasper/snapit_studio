@@ -81,6 +81,13 @@ function GalleryItem({ item, index }) {
 
   useEffect(() => {
     if (prefersReduced) return;
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      if (wrapRef.current) gsap.set(wrapRef.current, { clipPath: 'none' });
+      if (innerRef.current) gsap.set(innerRef.current, { scale: 1 });
+      return;
+    }
+
     const ctx = gsap.context(() => {
       gsap.set(wrapRef.current, { clipPath: getClipStart(item.revealDir) });
       gsap.set(innerRef.current, { scale: 1.2 });

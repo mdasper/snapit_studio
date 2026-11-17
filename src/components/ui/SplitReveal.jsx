@@ -18,9 +18,10 @@ export default function SplitReveal({
 }) {
   const containerRef = useRef(null);
   const prefersReduced = useReducedMotion();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   useEffect(() => {
-    if (prefersReduced) return;
+    if (prefersReduced || isMobile) return;
     const el = containerRef.current;
     if (!el) return;
 
@@ -44,7 +45,7 @@ export default function SplitReveal({
     if (trigger === 'scroll') {
       st = ScrollTrigger.create({
         trigger: el,
-        start: 'top 85%',
+        start: 'top 92%',
         onEnter: () => anim.play(),
       });
     } else {
@@ -55,7 +56,7 @@ export default function SplitReveal({
       anim.kill();
       st?.kill();
     };
-  }, [delay, trigger, prefersReduced, children]);
+  }, [delay, trigger, prefersReduced, children, isMobile]);
 
   if (typeof children !== 'string') {
     return (
@@ -78,7 +79,7 @@ export default function SplitReveal({
           key={i}
           style={{
             display: 'inline-block',
-            overflow: 'hidden',
+            overflow: isMobile ? 'visible' : 'hidden',
             verticalAlign: 'top',
             marginRight: i < words.length - 1 ? '0.28em' : '0',
           }}
@@ -87,7 +88,7 @@ export default function SplitReveal({
             className="split-char-wrap"
             style={{
               display: 'inline-block',
-              transform: prefersReduced ? 'none' : 'translateY(110%)',
+              transform: prefersReduced || isMobile ? 'none' : 'translateY(110%)',
             }}
           >
             {word}

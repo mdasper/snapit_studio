@@ -32,6 +32,17 @@ export default function IntroStatement() {
 
     const wordSpans = container.querySelectorAll('[data-word]');
 
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      gsap.set(wordSpans, { opacity: 1 });
+      wordSpans.forEach((span) => {
+        if (span.dataset.highlight === 'true') {
+          span.style.color = 'var(--yellow)';
+        }
+      });
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // Set initial opacity
       gsap.set(wordSpans, { opacity: 0.15 });

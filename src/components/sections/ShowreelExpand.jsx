@@ -18,8 +18,17 @@ export default function ShowreelExpand() {
   const prefersReduced = useReducedMotion();
   const { setCursorState } = useCursor();
 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    if (prefersReduced) return;
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReduced || isMobile) return;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -44,7 +53,7 @@ export default function ShowreelExpand() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [prefersReduced]);
+  }, [prefersReduced, isMobile]);
 
   const openModal = useCallback(() => {
     setModalOpen(true);
@@ -69,14 +78,14 @@ export default function ShowreelExpand() {
       <div
         ref={pinWrapRef}
         style={{
-          minHeight: '100svh',
-          height: '100dvh',
+          minHeight: isMobile ? 'auto' : '100svh',
+          height: isMobile ? 'auto' : '100dvh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
           position: 'relative',
-          padding: '1rem',
+          padding: isMobile ? '4rem 1rem 3rem' : '1rem',
           boxSizing: 'border-box',
         }}
       >
