@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
@@ -7,13 +8,7 @@ import { services } from '../../data/services';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function ServiceRow({ service, index, total, onHover, isHovered, isDimmed }) {
-  const rowRef = useRef(null);
-  const previewRef = useRef(null);
-  const arrowRef = useRef(null);
-  const quickX = useRef(null);
-  const quickY = useRef(null);
-  const [expanded, setExpanded] = useState(false);
+function ServiceRow({ service, index, onHover, isHovered }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -23,72 +18,43 @@ function ServiceRow({ service, index, total, onHover, isHovered, isDimmed }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    const preview = previewRef.current;
-    if (!preview || isMobile) return;
-    quickX.current = gsap.quickTo(preview, 'x', { duration: 0.4, ease: 'power3.out' });
-    quickY.current = gsap.quickTo(preview, 'y', { duration: 0.4, ease: 'power3.out' });
-  }, [isMobile]);
-
-  const handleMouseMove = (e) => {
-    if (!quickX.current || !quickY.current) return;
-    const rect = rowRef.current.getBoundingClientRect();
-    quickX.current(e.clientX - rect.left - 100);
-    quickY.current(e.clientY - rect.top - 100);
-  };
-
-  const handleMouseEnter = () => {
-    onHover(index);
-    if (arrowRef.current) gsap.to(arrowRef.current, { rotation: 45, duration: 0.3, ease: 'power2.out' });
-    if (previewRef.current) gsap.to(previewRef.current, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' });
-  };
-
-  const handleMouseLeave = () => {
-    onHover(null);
-    if (arrowRef.current) gsap.to(arrowRef.current, { rotation: 0, duration: 0.3, ease: 'power2.out' });
-    if (previewRef.current) gsap.to(previewRef.current, { opacity: 0, scale: 0.9, duration: 0.3, ease: 'power2.out' });
-  };
-
-  const gradients = [
-    'linear-gradient(135deg, #10282c, #6b9599)',
-    'linear-gradient(135deg, #1b4348, #f2d34f33)',
-    'linear-gradient(135deg, #6b9599, #10282c)',
-  ];
-
   return (
-    <div
-      ref={rowRef}
-      onMouseMove={!isMobile ? handleMouseMove : undefined}
-      onMouseEnter={!isMobile ? handleMouseEnter : undefined}
-      onMouseLeave={!isMobile ? handleMouseLeave : undefined}
+    <Link
+      to="/services"
+      onMouseEnter={() => onHover(index)}
+      onMouseLeave={() => onHover(null)}
       style={{
+        display: 'block',
+        textDecoration: 'none',
         position: 'relative',
-        borderBottom: '1px solid rgba(107,149,153,0.2)',
-        opacity: isDimmed ? 0.3 : 1,
-        transition: 'opacity 0.3s ease',
-        overflow: isMobile ? 'visible' : 'hidden',
+        borderBottom: `1px solid ${isHovered ? 'rgba(242,211,79,0.35)' : 'rgba(107,149,153,0.2)'}`,
+        background: isHovered ? 'rgba(107,149,153,0.06)' : 'transparent',
+        padding: isMobile ? '1.4rem 0.5rem' : '1.6rem 1rem',
+        borderRadius: '12px',
+        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        cursor: 'pointer',
       }}
     >
-      {/* Desktop layout */}
       <div
-        onClick={isMobile ? () => setExpanded(!expanded) : undefined}
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: isMobile ? '1.5rem 0' : '2rem 0',
-          gap: '2rem',
-          cursor: isMobile ? 'pointer' : 'none',
+          gap: '1.5rem',
+          flexWrap: isMobile ? 'wrap' : 'nowrap',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '1.5rem' }}>
+        {/* Left: Index + Service Title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', minWidth: isMobile ? '100%' : 'auto' }}>
           <span
             style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.8rem',
-              color: 'var(--teal)',
-              letterSpacing: '0.2em',
-              minWidth: '2rem',
+              fontFamily: 'var(--font-mono, monospace)',
+              fontSize: '0.85rem',
+              color: isHovered ? 'var(--yellow)' : 'var(--teal)',
+              letterSpacing: '0.15em',
+              fontWeight: 600,
+              minWidth: '2.2rem',
+              transition: 'color 0.3s ease',
             }}
           >
             {String(index + 1).padStart(2, '0')}
@@ -96,112 +62,98 @@ function ServiceRow({ service, index, total, onHover, isHovered, isDimmed }) {
           <h3
             style={{
               fontFamily: 'var(--font-display)',
-              fontWeight: 800,
-              fontSize: 'clamp(2rem, 7vw, 7rem)',
-              color: 'var(--cloud)',
+              fontWeight: 700,
+              fontSize: 'clamp(1.35rem, 2.5vw, 2.25rem)',
+              color: isHovered ? 'var(--yellow)' : 'var(--cloud)',
               margin: 0,
-              lineHeight: 1,
-              letterSpacing: '-0.02em',
+              lineHeight: 1.2,
+              letterSpacing: '-0.01em',
+              transform: isHovered && !isMobile ? 'translateX(6px)' : 'none',
+              transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             {service.title}
           </h3>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          {/* Sub-items on hover (desktop) */}
-          {!isMobile && isHovered && (
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', maxWidth: '300px', justifyContent: 'flex-end' }}>
-              {service.items.map((item, i) => (
-                <span
-                  key={i}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '0.7rem',
-                    color: 'var(--teal)',
-                    border: '1px solid rgba(107,149,153,0.4)',
-                    borderRadius: '100px',
-                    padding: '0.3rem 0.8rem',
-                    letterSpacing: '0.05em',
-                    whiteSpace: 'nowrap',
-                    animation: 'fadeInTag 0.3s ease forwards',
-                    animationDelay: `${i * 0.05}s`,
-                    opacity: 0,
-                  }}
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          )}
-
+        {/* Middle: Key Capabilities Pills (Desktop) */}
+        {!isMobile && (
           <div
-            ref={arrowRef}
             style={{
-              width: '48px',
-              height: '48px',
-              border: '1.5px solid rgba(238,240,238,0.3)',
-              borderRadius: '50%',
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--cloud)',
-              fontSize: '1.1rem',
-              flexShrink: 0,
+              gap: '0.5rem',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-end',
+              flex: 1,
+              padding: '0 1.5rem',
             }}
           >
-            {isMobile ? (expanded ? '−' : '+') : '→'}
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile accordion */}
-      {isMobile && expanded && (
-        <div style={{ paddingBottom: '1.5rem' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-            {service.items.map((item, i) => (
+            {service.items.slice(0, 3).map((item, i) => (
               <span
                 key={i}
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: '0.75rem',
-                  color: 'var(--teal)',
-                  border: '1px solid rgba(107,149,153,0.4)',
+                  fontSize: '0.72rem',
+                  color: isHovered ? 'var(--cloud)' : 'rgba(238,240,238,0.7)',
+                  background: isHovered ? 'rgba(107,149,153,0.18)' : 'rgba(107,149,153,0.08)',
+                  border: `1px solid ${isHovered ? 'rgba(242,211,79,0.3)' : 'rgba(107,149,153,0.25)'}`,
                   borderRadius: '100px',
-                  padding: '0.4rem 1rem',
+                  padding: '0.25rem 0.75rem',
+                  letterSpacing: '0.03em',
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.3s ease',
                 }}
               >
                 {item}
               </span>
             ))}
           </div>
+        )}
+
+        {/* Right: Sleek Arrow Button */}
+        <div
+          style={{
+            width: isMobile ? '38px' : '44px',
+            height: isMobile ? '38px' : '44px',
+            borderRadius: '50%',
+            border: `1.5px solid ${isHovered ? 'var(--yellow)' : 'rgba(238,240,238,0.25)'}`,
+            background: isHovered ? 'rgba(242,211,79,0.12)' : 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: isHovered ? 'var(--yellow)' : 'var(--cloud)',
+            fontSize: '1rem',
+            flexShrink: 0,
+            transform: isHovered && !isMobile ? 'translateX(4px)' : 'none',
+            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          →
+        </div>
+      </div>
+
+      {/* Mobile Pills */}
+      {isMobile && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.75rem', paddingLeft: '3.4rem' }}>
+          {service.items.slice(0, 2).map((item, i) => (
+            <span
+              key={i}
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.68rem',
+                color: 'rgba(238,240,238,0.7)',
+                background: 'rgba(107,149,153,0.1)',
+                border: '1px solid rgba(107,149,153,0.25)',
+                borderRadius: '100px',
+                padding: '0.2rem 0.6rem',
+              }}
+            >
+              {item}
+            </span>
+          ))}
         </div>
       )}
-
-      {/* Floating media preview (desktop) */}
-      {!isMobile && (
-        <div
-          ref={previewRef}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '280px',
-            height: '180px',
-            borderRadius: '1.25rem',
-            backgroundImage: `url(${service.image || '/media/ads_shoot.jpg'})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            border: '2px solid var(--yellow)',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.7)',
-            opacity: 0,
-            scale: 0.9,
-            pointerEvents: 'none',
-            zIndex: 10,
-          }}
-        />
-      )}
-    </div>
+    </Link>
   );
 }
 
@@ -215,7 +167,7 @@ export default function Services() {
     const ctx = gsap.context(() => {
       gsap.from(sectionRef.current.querySelectorAll('[data-row]'), {
         opacity: 0,
-        y: 40,
+        y: 30,
         duration: 0.8,
         stagger: 0.1,
         ease: 'power3.out',
@@ -238,14 +190,14 @@ export default function Services() {
       }}
     >
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
         <SplitReveal
           as="h2"
           trigger="scroll"
           style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 800,
-            fontSize: 'clamp(1.4rem, 3vw, 2rem)',
+            fontSize: 'clamp(1.5rem, 3vw, 2.4rem)',
             color: 'var(--cloud)',
             margin: 0,
           }}
@@ -259,6 +211,7 @@ export default function Services() {
             color: 'var(--teal)',
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
+            fontWeight: 600,
           }}
         >
           What we do
@@ -271,22 +224,12 @@ export default function Services() {
             <ServiceRow
               service={service}
               index={i}
-              total={services.length}
               onHover={setHoveredIndex}
               isHovered={hoveredIndex === i}
-              isDimmed={hoveredIndex !== null && hoveredIndex !== i}
             />
           </div>
         ))}
       </div>
-
-      <style>{`
-        @keyframes fadeInTag {
-          from { opacity: 0; transform: translateY(4px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </section>
   );
 }
-
